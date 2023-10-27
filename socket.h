@@ -1,12 +1,26 @@
 #pragma once
+
 #include <concepts>
-#include <array>
-#include <cstdint>
+// #include <array>
 #include <coroutine>
 #include <memory>
+#include <span>
 
-struct task
+template < typename Ty >
+concept Socket 
+    = requires ( Ty sock, std::span<std::byte> data )
+    {
+        sock.receive( data );
+        sock.send( data );
+        sock.readable();
+        sock.writable();
+    };
+
+template < Socket Impl >
+class socket
 {
+struct task
+{ 
     struct promise_type
     {
         task get_return_object() { return{}; }
@@ -14,39 +28,15 @@ struct task
         std::suspend_never final_suspend() { return {}; }
         void return_void() {}
         void unhandled_exception() {}
-    };
+    }; 
 };
 
-// template <class socket_t>
-// requires requires( socket_t socket ) { socket.async_read(); }
-// class receiver
-// {
-//     task receive();
-// };
-
-// 
-task receive( socket sock, auto& data );
-
-// task send()
-
-class protocol;
-
-class socket {
-    class impl;
-    std::unique_ptr<impl> impl_p;
 public:
-static constexpr std::size_t		ETH_FRAME_LEN			{ 1514 };
-    // typedef protocol_type 
-    socket();
-    task async_read( auto& data );
-    task async_write( auto& data );
+    socket( auto&&... args )
+    : impl_( std::forward<decltype(args)>(args)... ) {}
+    auto async_read( std::span<std::byte> data );
+    auto async_write( std::span<std::byte> data );
+    bool readable();
 private:
-    
-};
-
-
-
-class msg_handler {
-
-
+    std::unique_ptr<Impl> impl_;
 };

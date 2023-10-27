@@ -17,8 +17,8 @@ using namespace std::chrono_literals;
 
 class Authentication {
 public:
-static constexpr std::string_view 	DEFAULT_SERVER_ADDR 	{"202.38.210.131"};
-static constexpr std::string_view 	DEFAULT_DNS_ADDR		{"222.201.130.30"};
+static constexpr std::string_view 	DEFAULT_SERVER_ADDR 	{ "202.38.210.131" };
+static constexpr std::string_view 	DEFAULT_DNS_ADDR		{ "222.201.130.30" };
 static constexpr std::size_t		DEFAULT_SERVER_PORT 	{ 61440 };
 static constexpr std::size_t		ETH_FRAME_LEN			{ 1514 };
 static constexpr std::size_t        ETH_P_PAE               { 0x888e };
@@ -35,7 +35,7 @@ private:
 	// receive
 	// sent
 	// handle
-	std::array<uint8_t, ETH_FRAME_LEN> data;
+	std::array<std::byte, ETH_FRAME_LEN> data;
 
 };
 
@@ -45,7 +45,7 @@ private:
 	// receive
 	// sent
 	// handle
-	std::array<uint8_t, ETH_FRAME_LEN> data;
+	std::array<std::byte, ETH_FRAME_LEN> data;
 };
 
 	Authentication ( LOG_STATUS status, std::shared_ptr<Logger> lg ) 
@@ -56,7 +56,7 @@ private:
 	LOG_STATUS status;
 	std::shared_ptr<Logger> logger;
 	// ip::udp::socket skt;
-}
+};
 
 
 
